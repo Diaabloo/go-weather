@@ -1,0 +1,114 @@
+# version: '3.8'
+
+# services:
+#   backend:
+#     build:
+#       context: ./backend
+#       dockerfile: Dockerfile
+#     container_name: go-weather-backend
+#     restart: always
+#     env_file:
+#       - ./.env
+#     environment:
+#       - PORT=8080
+#       - MONGODB_URI=mongodb://amineelalami:p2mshacO6mYpbTVn@mongo:27017
+#       - OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY}
+#       - JWT_SECRET=${JWT_SECRET}
+#     depends_on:
+#       - mongo
+#     ports:
+#       - "8080:8080"
+#     networks:
+#       - go-weather-net
+
+#   client:
+#     build:
+#       context: ./client
+#       dockerfile: Dockerfile
+#     container_name: go-weather-client
+#     restart: always
+#     environment:
+#       - NEXT_PUBLIC_API_URL=http://localhost:8080
+#     depends_on:
+#       - backend
+#     ports:
+#       - "3000:3000"
+#     networks:
+#       - go-weather-net
+
+#   mongo:
+#     image: mongo:7.0
+#     container_name: go-weather-mongo
+#     restart: always
+#     ports:
+#       - "27017:27017"
+#     environment:
+#       MONGO_INITDB_ROOT_USERNAME: amineelalami
+#       MONGO_INITDB_ROOT_PASSWORD: p2mshacO6mYpbTVn
+#       MONGO_INITDB_DATABASE: weatherdb
+#     volumes:
+#       - mongo-data:/data/db
+#       - ./init-mongo:/docker-entrypoint-initdb.d  # Monte le dossier init-mongo
+#     networks:
+#       - go-weather-net
+
+# volumes:
+#   mongo-data:
+
+# networks:
+#   go-weather-net:
+#     driver: bridge
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: go-weather-backend
+    restart: always
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - mongo
+    ports:
+      - "8080:8080"
+    networks:
+      - go-weather-net
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: go-weather-client
+    restart: always
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8080
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    networks:
+      - go-weather-net
+
+  mongo:
+    image: mongo:7.0
+    container_name: go-weather-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: amineelalami
+      MONGO_INITDB_ROOT_PASSWORD: p2mshacO6mYpbTVn
+      MONGO_INITDB_DATABASE: weatherdb
+    volumes:
+      - mongo-data:/data/db
+      - ./init-mongo:/docker-entrypoint-initdb.d
+    networks:
+      - go-weather-net
+
+volumes:
+  mongo-data:
+
+networks:
+  go-weather-net:
+    driver: bridge
