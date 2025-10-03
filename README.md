@@ -1,68 +1,68 @@
 # Documentation du projet Go-Weather
 
-## 1. Aperçu du projet
-**Go-Weather** est une application backend en Go qui fournit des endpoints d'authentification (signup, signin) et une API météo utilisant l'API OpenWeather. Elle utilise MongoDB pour stocker les utilisateurs et JWT pour sécuriser les endpoints. Le projet suit les bonnes pratiques de structuration de code, comme demandé par mon professeur, en utilisant le dossier `internal/` pour organiser le code.
+## 1. Project Overview
+**Go-Weather** is a backend application in Go that provides authentication endpoints (signup, signin) and a weather API using the OpenWeather API. It uses MongoDB to store users and JWT to secure the endpoints. The project follows best code structuring practices, as required by my professor, by using the internal/ directory to organize the code.
 
-Le projet est hébergé dans `C:\Users\XPS\Desktop\go-weather` (initialement dans `backend/`, mais déplacé pour éviter les problèmes de `$GOPATH`).
+The project is hosted in C:\Users\XPS\Desktop\go-weather (initially in backend/, but moved to avoid $GOPATH issues).
 
-### Fonctionnalités
-- **/api/health**: Vérifie si le serveur fonctionne (GET).
-- **/api/signup**: Enregistre un nouvel utilisateur avec email et mot de passe (POST).
-- **/api/signin**: Connecte un utilisateur et retourne un token JWT (POST).
-- **/api/weather?city=<ville>**: Récupère les données météo pour une ville, protégé par JWT (GET).
+### Features
+- **/api/health**: Checks if the server is running (GET).
+- **/api/signup**: Registers a new user with email and password (POST).
+- **/api/signin**: Logs in a user and returns a JWT token (POST).
+- **/api/weather?city=<ville>**: Retrieves weather data for a given city, protected by JWT (GET).
 
-## 2. Structure du projet
-Le projet est organisé selon une architecture modulaire avec des dossiers bien définis pour respecter les standards Go et éviter les erreurs d'importation.
+## 2. Project Structure
+The project is organized according to a modular architecture with well-defined folders to respect Go standards and avoid import errors.
 
 ```
 go-weather/
-├── .env                    # Variables d'environnement (API keys, MongoDB URI, etc.)
-├── .env.example            # Exemple de .env pour partager
-├── .gitignore              # Ignore .env et fichiers temporaires
-├── go.mod                  # Définitions du module Go
-├── go.sum                  # Somme des dépendances
+├── .env                    # Environment variables (API keys, MongoDB URI, etc.)
+├── .env.example            # Example of .env for sharing
+├── .gitignore              # Ignore .env and temporary files
+├── go.mod                  # Go module definitions
+├── go.sum                  # Dependencies checksum
 ├── cmd/
 │   └── app/
-│       └── main.go         # Point d'entrée de l'application
+│       └── main.go         # Application entry point
 ├── internal/
 │   └── app/
-│       ├── app.go          # Initialisation et démarrage de l'application
+│       ├── app.go          # Initialization and application startup
 │       ├── config/
-│       │   ├── dependencies.go  # Gestion des dépendances (MongoDB, config)
-│       │   └── environment.go   # Chargement des variables d'environnement
+│       │   ├── dependencies.go  # Dependency management (MongoDB, config)
+│       │   └── environment.go   # Environment variables loading
 │       ├── http/
-│       │   ├── auth_handler.go      # Gestion des endpoints signup/signin
-│       │   ├── healthcheck_handler.go # Endpoint /api/health
-│       │   ├── response.go          # Fonction utilitaire sendResponse
-│       │   ├── server.go            # Configuration du serveur HTTP
-│       │   └── weather_handler.go    # Endpoint /api/weather
+│       │   ├── auth_handler.go      # Handles signup/signin endpoints
+│       │   ├── healthcheck_handler.go # /api/health endpoint
+│       │   ├── response.go          # Utility function sendResponse
+│       │   ├── server.go            # HTTP server configuration
+│       │   └── weather_handler.go   # /api/weather endpoint
 │       ├── mongo/
-│       │   └── user.go              # Opérations MongoDB pour les utilisateurs
+│       │   └── user.go              # MongoDB operations for users
 │       ├── models/
-│       │   ├── user.go              # Structure des données utilisateur
-│       │   └── weather.go           # Structures pour les données météo
+│       │   ├── user.go              # User data structures
+│       │   └── weather.go           # Weather data structures
 │       └── utils/
-│           └── jwt.go               # Gestion des tokens JWT
+│           └── jwt.go               # JWT token management
 ├── tests/
-│   └── auth_test.go                 # Tests pour l'authentification
+│   └── auth_test.go                 # Authentication tests
+
 ```
 
-### Explication des dossiers
-- **`cmd/app/main.go`**: Contient la fonction `main` qui appelle `app.Run()` pour démarrer l'application.
-- **`internal/app/`**: Contient tout le code principal, organisé en sous-modules :
-  - `config/` : Gère les variables d’environnement et les dépendances (MongoDB, clés API).
-  - `http/` : Gère les endpoints HTTP et les réponses JSON.
-  - `mongo/` : Gère les interactions avec MongoDB (création/recherche d’utilisateurs).
-  - `models/` : Définit les structs pour les utilisateurs et les données météo.
-  - `utils/` : Contient les utilitaires, comme la gestion des JWT.
-- **`tests/`**: Contient les tests unitaires (par exemple, pour l’authentification).
+### Folder Explanation
+- **`cmd/app/main.go`**: Contains the main function that calls app.Run() to start the application.
+- **`internal/app/`**: Contains all core code, organized into submodules:
+  - `config/` : Handles environment variables and dependencies (MongoDB, API keys).
+  - `http/` : Handles HTTP endpoints and JSON responses.
+  - `mongo/` : Handles MongoDB interactions (user creation/search).
+  - `models/` : Defines structs for users and weather data.
+  - `utils/` : Contains utilities, such as JWT management.
+- **`tests/`**: Contains unit tests (e.g., authentication).
 
-## 3. Contenu des fichiers clés
+## 3. Key Files Content
 
 ### go.mod
-Définit le module et les dépendances utilisées :
-```go
-module github.com/Diaabloo/go-weather
+Defines the module and dependencies used:
+```module github.com/Diaabloo/go-weather
 
 go 1.25.1
 
@@ -73,19 +73,12 @@ require (
     go.mongodb.org/mongo-driver v1.17.4
     golang.org/x/crypto v0.42.0
 )
+
 ```
 
-### .env
-Contient les variables d’environnement (non partagé dans le dépôt) :
-```env
-OPENWEATHER_API_KEY=5fceee4b9bf1d9a274a428ffd81ec5ae
-PORT=8080
-MONGODB_URI=mongodb+srv://amineelalami05:p2mshacO6mYpbTVn@cluster0.0i6tj3k.mongodb.net/
-JWT_SECRET=3f9c2d78a1e4c7f1d0a9b6e5f4c2a7d1e8b9c0f5a6d3e7b2c8f4a1d9e6b3c7f8
-```
 
 ### cmd/app/main.go
-Point d’entrée qui démarre l’application :
+Entry point that starts the application:
 ```go
 package main
 
@@ -102,7 +95,7 @@ func main() {
 ```
 
 ### internal/app/app.go
-Initialise les dépendances et démarre le serveur :
+Initializes dependencies and starts the server:
 ```go
 package app
 
@@ -124,7 +117,7 @@ func Run() error {
 ```
 
 ### internal/app/http/response.go
-Définit la fonction utilitaire `sendResponse` pour envoyer des réponses JSON :
+Defines the utility function sendResponse to send JSON responses:
 ```go
 package http
 
@@ -145,80 +138,39 @@ func sendResponse(w http.ResponseWriter, statusCode int, response models.Respons
 ```
 
 ### internal/app/http/auth_handler.go
-Gère les endpoints `/api/signup` et `/api/signin` :
-- **Signup**: Crée un utilisateur avec email/mot de passe (haché avec bcrypt).
-- **Signin**: Vérifie les identifiants et retourne un token JWT.
+Handles /api/signup and /api/signin endpoints:
+- **Signup**: Creates a user with email/password (hashed with bcrypt).
+- **Signin**: Validates credentials and returns a JWT token.
 
 ### internal/app/http/weather_handler.go
-Gère l’endpoint `/api/weather` :
-- Récupère les données météo via l’API OpenWeather pour une ville donnée.
-- Protégé par un middleware JWT.
+Handles /api/weather endpoint:
+- Fetches weather data from OpenWeather API for a given city.
+- Protected by a JWT middleware.
 
 ### internal/app/utils/jwt.go
-Gère la création et la validation des tokens JWT :
-- **GenerateJWT**: Crée un token avec l’email et une expiration (24h).
-- **ValidateJWT**: Vérifie la validité du token.
-- **AuthMiddleware**: Protège les routes (par exemple, `/api/weather`) en vérifiant le token JWT.
+Manages JWT token creation and validation:
+- **GenerateJWT**: Creates a token with email and expiration (24h).
+- **ValidateJWT**: Validates the token.
+- **AuthMiddleware**: Protects routes (e.g., /api/weather) by checking JWT token.
 
-## 4. Problèmes rencontrés et solutions
-
-### Erreur 1 : Importation de `github.com/Diaabloo/go-weather/internal/app` non trouvée
-- **Problème** : `main.go` essayait d’importer des packages inexistants (`github.com/Diaabloo/go-weather/config` et `routes`).
-- **Solution** : Corrigé en mettant à jour `main.go` pour importer `github.com/Diaabloo/go-weather/internal/app` et en vérifiant que `internal/app/app.go` existe avec le bon contenu.
-
-### Erreur 2 : Importation inutilisée de `go.mongodb.org/mongo-driver/mongo`
-- **Problème** : Dans `auth_handler.go`, le package `mongo` était importé mais non utilisé, causant une erreur `compilerUnusedImport`.
-- **Solution** : Supprimé l’importation inutile, car les opérations MongoDB sont gérées dans `internal/app/mongo/user.go`.
-
-### Erreur 3 : Déclaration en double de `sendResponse`
-- **Problème** : La fonction `sendResponse` était définie dans `auth_handler.go` et `weather_handler.go`, causant une erreur `compilerDuplicateDecl`.
-- **Solution** : Déplacé `sendResponse` dans un nouveau fichier `response.go` pour une seule définition partagée dans le package `http`.
-
-### Erreur 4 : Variable `ctx` non utilisée
-- **Problème** : Dans `app.go`, une variable `ctx` était déclarée pour stocker `JWTSecret` mais non utilisée, causant une erreur `compilerUnusedVar`.
-- **Solution** : Supprimé `ctx` et modifié `utils/jwt.go` pour passer `JWTSecret` directement au middleware via l’injection de dépendances.
-
-### Erreur 5 : Fichier `response.go` vide
-- **Problème** : `response.go` était vide, causant une erreur `expected 'package', found 'EOF'`.
-- **Solution** : Créé `response.go` avec la déclaration correcte du package et la fonction `sendResponse`.
-
-### Erreur 6 : Avertissement `$GOPATH`
-- **Problème** : Go ignorait `go.mod` car le projet était dans un sous-dossier de `$GOPATH` (`C:\Users\XPS\go`).
-- **Solution** : Déplacé le projet vers `C:\Users\XPS\Desktop\go-weather` (en dehors de `$GOPATH`) et défini `GO111MODULE=on` pour forcer le mode module. Vérifié qu’aucun `go.mod` parasite n’existait dans `C:\Users\XPS\go`.
-
-## 5. Tests avec Postman
-Pour vérifier que l’application fonctionne, j’ai testé les endpoints avec Postman :
-- **/api/health** (GET) :
-  - URL : `http://localhost:8080/api/health`
-  - Réponse : `{"status": "OK"}` (code 200)
-- **/api/signup** (POST) :
-  - URL : `http://localhost:8080/api/signup`
-  - Corps : `{"email": "test@example.com", "password": "password123"}`
-  - Réponse : `{"status": "success", "data": "Utilisateur créé"}` (code 201)
-- **/api/signin** (POST) :
-  - URL : `http://localhost:8080/api/signin`
-  - Corps : `{"email": "test@example.com", "password": "password123"}`
-  - Réponse : `{"status": "success", "data": {"token": "eyJ..."}}` (code 200)
-- **/api/weather** (GET) :
-  - URL : `http://localhost:8080/api/weather?city=Paris`
-  - En-tête : `Authorization: Bearer <token>`
-  - Réponse : Données météo (température, humidité, etc.) (code 200)
-  - Sans token : `{"error": "Token manquant"}` (code 401)
-
-## 6. Concepts appris
-- **Go Modules** : Utilisation de `go.mod` pour gérer les dépendances et éviter les problèmes de `$GOPATH`.
-- **Structs vs map[string]interface{}** : Les structs (par exemple, `models.User`, `models.Weather`) sont plus sûrs et clairs que `map[string]interface{}` pour gérer les données JSON.
+## 4. Concepts appris
+- **Go Modules** : Utilisation de `go.mod` pour gérer les dépendances et éviter les problèmes liés à `$GOPATH`.
+- **Structs vs map[string]interface{}** : Les `structs` (par exemple, `models.User`, `models.Weather`) sont plus sûrs et clairs que `map[string]interface{}` pour manipuler les données JSON.
 - **Packages internes** : Utilisation de `internal/` pour organiser le code et restreindre l’accès aux packages en dehors du module.
 - **Middleware JWT** : Sécurisation des routes avec des tokens JWT pour protéger l’endpoint `/api/weather`.
 - **MongoDB** : Connexion à MongoDB pour stocker les utilisateurs et hachage des mots de passe avec `bcrypt`.
-- **CORS** : Configuration de `github.com/rs/cors` pour permettre les requêtes depuis un frontend (par exemple, `http://localhost:3000`).
-- **Gestion des erreurs** : Résolution d’erreurs comme `compilerUnusedImport`, `compilerDuplicateDecl`, et `compilerUnusedVar` en nettoyant les imports et en consolidant les fonctions.
+- **CORS** : Configuration de `github.com/rs/cors` pour autoriser les requêtes provenant d’un frontend (exemple : `http://localhost:3000`).
+- **Gestion des erreurs** : Résolution d’erreurs comme `compilerUnusedImport`, `compilerDuplicateDecl` et `compilerUnusedVar` en nettoyant les imports et en consolidant les fonctions.
 
-## 7. Étapes pour exécuter le projet
+---
+
+## 5. Étapes pour exécuter le projet
+
 1. **Configurer l’environnement** :
-   - S’assurer que le projet est dans `C:\Users\XPS\Desktop\go-weather`.
-   - Vérifier que `.env` contient les bonnes clés (OpenWeather, MongoDB, JWT).
-   - Définir `GO111MODULE=on` :
+   - Vérifier que le projet est bien dans :
+     `C:\Users\XPS\Desktop\go-weather`
+   - S’assurer que le fichier `.env` contient les bonnes clés (OpenWeather, MongoDB, JWT).
+   - Définir la variable d’environnement Go :
      ```powershell
      setx GO111MODULE on
      ```
@@ -227,20 +179,3 @@ Pour vérifier que l’application fonctionne, j’ai testé les endpoints avec 
    ```powershell
    cd C:\Users\XPS\Desktop\go-weather
    go mod tidy
-   ```
-
-3. **Compiler et exécuter** :
-   ```powershell
-   go build cmd/app/main.go
-   go run cmd/app/main.go
-   ```
-
-4. **Tester avec Postman** : Suivre les tests décrits dans la section 5.
-
-## 8. Notes pour le professeur
-- Le projet respecte les bonnes pratiques Go, avec une séparation claire entre la logique métier (`internal/app/`), les modèles (`models/`), et les utilitaires (`utils/`).
-- Les erreurs rencontrées (imports, déclarations en double, `$GOPATH`) ont été résolues en suivant les recommandations de structuration et en utilisant le mode module.
-- Le code est commenté et testé avec Postman pour garantir que les endpoints fonctionnent.
-- J’ai appris à gérer les dépendances, sécuriser les routes avec JWT, et interagir avec MongoDB, ce qui m’a aidé à mieux comprendre Go en tant que débutant.
-
-Si vous avez des suggestions pour améliorer le projet ou des points à clarifier, je suis prêt à les intégrer !
