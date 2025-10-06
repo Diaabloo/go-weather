@@ -1,9 +1,7 @@
 # Documentation du projet Go-Weather
 
 ## 1. Project Overview
-**Go-Weather** is a backend application in Go that provides authentication endpoints (signup, signin) and a weather API using the OpenWeather API. It uses MongoDB to store users and JWT to secure the endpoints. The project follows best code structuring practices, as required by my professor, by using the internal/ directory to organize the code.
-
-The project is hosted in C:\Users\XPS\Desktop\go-weather (initially in backend/, but moved to avoid $GOPATH issues).
+**Go-Weather** is a backend application in Go that provides authentication endpoints (signup, signin) and a weather API using the OpenWeather API. It uses MongoDB to store users and JWT to secure the endpoints.
 
 ### Features
 - **/api/health**: Checks if the server is running (GET).
@@ -153,29 +151,28 @@ Manages JWT token creation and validation:
 - **ValidateJWT**: Validates the token.
 - **AuthMiddleware**: Protects routes (e.g., /api/weather) by checking JWT token.
 
-## 4. Concepts appris
-- **Go Modules** : Utilisation de `go.mod` pour gérer les dépendances et éviter les problèmes liés à `$GOPATH`.
-- **Structs vs map[string]interface{}** : Les `structs` (par exemple, `models.User`, `models.Weather`) sont plus sûrs et clairs que `map[string]interface{}` pour manipuler les données JSON.
-- **Packages internes** : Utilisation de `internal/` pour organiser le code et restreindre l’accès aux packages en dehors du module.
-- **Middleware JWT** : Sécurisation des routes avec des tokens JWT pour protéger l’endpoint `/api/weather`.
-- **MongoDB** : Connexion à MongoDB pour stocker les utilisateurs et hachage des mots de passe avec `bcrypt`.
-- **CORS** : Configuration de `github.com/rs/cors` pour autoriser les requêtes provenant d’un frontend (exemple : `http://localhost:3000`).
-- **Gestion des erreurs** : Résolution d’erreurs comme `compilerUnusedImport`, `compilerDuplicateDecl` et `compilerUnusedVar` en nettoyant les imports et en consolidant les fonctions.
+## 4. Learned Concepts
+- **Go Modules**: Use of `go.mod` to manage dependencies and avoid issues related to `$GOPATH`.
+- **Internal Packages**: Use of `internal/` to organize the code and restrict access to packages outside the module.
+- **JWT Middleware**: Securing routes with JWT tokens to protect the endpoint.
+- **MongoDB**: Connection to MongoDB to store users and password hashing with `bcrypt`.
+- **CORS**: Configuration of `github.com/rs/cors` to allow requests coming from a frontend (example: `http://localhost:3000`).
+- **Error Handling**: Resolving errors such as `compilerUnusedImport`, `compilerDuplicateDecl` and `compilerUnusedVar` by cleaning up imports and consolidating functions.
 
 ---
 
-## 5. Étapes pour exécuter le projet
+## 5. Steps to Run the Project
 
-1. **Configurer l’environnement** :
-   - Vérifier que le projet est bien dans :
+1. **Set up the environment**:
+   - Make sure the project is located in:
      `C:\Users\XPS\Desktop\go-weather`
-   - S’assurer que le fichier `.env` contient les bonnes clés (OpenWeather, MongoDB, JWT).
-   - Définir la variable d’environnement Go :
+   - Ensure that the `.env` file contains the correct keys (OpenWeather, MongoDB, JWT).
+   - Define the Go environment variable:
      ```powershell
      setx GO111MODULE on
      ```
 
-2. **Installer les dépendances** :
+2. **Install dependencies**:
    ```powershell
    cd C:\Users\XPS\Desktop\go-weather
    go mod tidy
